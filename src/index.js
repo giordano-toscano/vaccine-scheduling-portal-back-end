@@ -1,5 +1,6 @@
 // essa API está consumindo localhost na porta 3000
 import express from "express";
+import morgan from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import UserRouter from "./router/UserRouter.js";
@@ -21,6 +22,7 @@ mongoose
 const app = express();
 
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(UserRouter);
 
 app.listen(PORT, () => {
