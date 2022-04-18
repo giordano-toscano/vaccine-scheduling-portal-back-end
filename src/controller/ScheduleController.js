@@ -1,13 +1,14 @@
-import UserModel from "../model/UserModel.js";
-class UserController {
+import ScheduleModel from "../model/ScheduleModel.js";
+
+class ScheduleController {
     async getOne(request, response) {
         const id = request.params.id;
         try {
-            const user = await UserModel.findById(id);
-            if (user) {
-                return response.send(user);
+            const schedule = await ScheduleModel.findById(id);
+            if (schedule) {
+                return response.send(schedule);
             }
-            response.status(404).send({ message: "User not found" });
+            response.status(404).send({ message: "Schedule not found" });
         } catch (error) {
             //console.error(error.stack);
             response.status(400).send({ message: "Invalid id" });
@@ -15,25 +16,25 @@ class UserController {
     }
 
     async index(request, response) {
-        const users = await UserModel.find();
-        response.send(users);
+        const schedules = await ScheduleModel.find();
+        response.send(schedules);
     }
 
     async remove(request, response) {
         const id = request.params.id;
-        const user = await UserModel.findById(id);
+        const schedule = await ScheduleModel.findById(id);
 
-        if (user) {
-            await user.remove();
-            return response.send({ message: "User Removed" });
+        if (schedule) {
+            await schedule.remove();
+            return response.send({ message: "Schedule removed" });
         }
-        response.status(404).send({ message: "User not found" });
+        response.status(404).send({ message: "Schedule not found" });
     }
 
     async store(request, response) {
         const { name, email, birthDate, schedulingDay, schedulingTime } = request.body;
 
-        const user = await UserModel.create({
+        const schedule = await ScheduleModel.create({
             name,
             email,
             birthDate,
@@ -41,14 +42,14 @@ class UserController {
             schedulingTime,
         });
 
-        return response.send({ message: "User Created", user });
+        return response.send({ message: "Schedule created", schedule: schedule });
     }
 
     async update(request, response) {
         const id = request.params.id;
         const { name, email, birthDate, schedulingDay, schedulingTime } = request.body;
 
-        const user = await UserModel.findByIdAndUpdate(
+        const schedule = await ScheduleModel.findByIdAndUpdate(
             id,
             {
                 name,
@@ -62,8 +63,8 @@ class UserController {
             }
         );
 
-        return response.send(user);
+        return response.send(schedule);
     }
 }
 
-export default UserController;
+export default ScheduleController;
