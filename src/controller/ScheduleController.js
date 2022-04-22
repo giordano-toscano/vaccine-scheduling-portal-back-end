@@ -6,18 +6,18 @@ class ScheduleController {
         try {
             const schedule = await ScheduleModel.findById(id);
             if (schedule) {
-                return response.send(schedule);
+                return response.json(schedule);
             }
-            response.status(404).send({ message: "Schedule not found" });
+            response.status(404).json({ message: "Schedule not found" });
         } catch (error) {
             //console.error(error.stack);
-            response.status(400).send({ message: "Invalid id" });
+            response.status(400).json({ message: "Invalid id" });
         }
     }
 
     async index(request, response) {
         const schedules = await ScheduleModel.find();
-        response.send(schedules);
+        response.json(schedules);
     }
 
     async remove(request, response) {
@@ -28,7 +28,7 @@ class ScheduleController {
             await schedule.remove();
             return response.send({ message: "Schedule removed" });
         }
-        response.status(404).send({ message: "Schedule not found" });
+        response.status(404).json({ message: "Schedule not found" });
     }
 
     async store(request, response) {
@@ -42,7 +42,7 @@ class ScheduleController {
             schedulingTime,
         });
 
-        return response.send({ message: "Schedule created", schedule: schedule });
+        return response.json({ message: "Schedule created", schedule: schedule });
     }
 
     async update(request, response) {
@@ -56,14 +56,14 @@ class ScheduleController {
                 email,
                 birthDate,
                 schedulingDay,
-                schedulingTim,
+                schedulingTime,
             },
             {
                 new: true,
             }
         );
 
-        return response.send(schedule);
+        return response.json(schedule);
     }
 }
 
