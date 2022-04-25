@@ -37,16 +37,18 @@ class ScheduleController {
 
     async store(request, response) {
         const { name, email, birthDate, schedulingDay, schedulingTime } = request.body;
-
-        const schedule = await ScheduleModel.create({
-            name,
-            email,
-            birthDate,
-            schedulingDay,
-            schedulingTime,
-        });
-
-        return response.json({ message: "Schedule created", schedule: schedule });
+        try {
+            const schedule = await ScheduleModel.create({
+                name,
+                email,
+                birthDate,
+                schedulingDay,
+                schedulingTime,
+            });
+            return response.json({ message: "Schedule created", schedule: schedule });
+        } catch (error) {
+            response.status(400).json({ message: "Fields are invalid or missing" });
+        }
     }
 
     async update(request, response) {
@@ -78,7 +80,7 @@ class ScheduleController {
 
             response.json({ item: countDate });
         } catch (error) {
-            response.json({ message: error.message });
+            response.status(400).json({ message: error.message });
         }
     }
 
