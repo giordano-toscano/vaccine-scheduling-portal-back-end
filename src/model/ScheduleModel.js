@@ -7,7 +7,7 @@ const ScheduleSchema = new mongoose.Schema(
         birthDate: { type: Date, required: true },
         schedulingDay: { type: Date, required: true },
         schedulingTime: { type: Date, required: true },
-        wasAttended: { type: Boolean, default: false },
+        wasAttended: { type: String, enum: ["yes", "no"], default: "no" },
     },
     {
         timestamps: true,

@@ -1,4 +1,5 @@
 // essa API está consumindo localhost na porta 3000
+import validationMiddleware from "./middleware/ValidationMiddleware.js";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -6,7 +7,6 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import ScheduleRouter from "./router/ScheduleRouter.js";
-import validationMiddleware from "./middleware/ValidationMiddleware.js";
 
 dotenv.config();
 

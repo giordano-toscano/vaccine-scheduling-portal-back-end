@@ -10,4 +10,7 @@ router.post("/api/schedules", scheduleController.store);
 router.put("/api/schedules/:id", scheduleController.update);
 router.delete("/api/schedules/:id", scheduleController.remove);
 
+router.get("/api/schedules/date/:schedulingDay", scheduleController.getQuantityInDate);
+router.get("/api/schedules/date/:schedulingDay/:schedulingTime", scheduleController.getQuantityInTime);
+
 export default router;

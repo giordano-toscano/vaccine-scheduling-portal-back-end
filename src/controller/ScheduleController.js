@@ -10,7 +10,7 @@ class ScheduleController {
             }
             response.status(404).json({ message: "Schedule not found" });
         } catch (error) {
-            //console.error(error.stack);
+            console.error(error.stack);
             response.status(400).json({ message: "Invalid id" });
         }
     }
@@ -21,14 +21,18 @@ class ScheduleController {
     }
 
     async remove(request, response) {
-        const id = request.params.id;
-        const schedule = await ScheduleModel.findById(id);
-
-        if (schedule) {
+        const { id } = request.params;
+        try {
+            const schedule = await ScheduleModel.findById(id);
+            if (!schedule) {
+                return response.status(404).json({ message: "Schedule not found" });
+            }
             await schedule.remove();
-            return response.send({ message: "Schedule removed" });
+            response.json({ message: "Schedule removed" });
+        } catch (error) {
+            console.error(error.message);
+            response.status(400).json({ message: "An unexpected error happened while trying to remove schedule" });
         }
-        response.status(404).json({ message: "Schedule not found" });
     }
 
     async store(request, response) {
@@ -47,7 +51,7 @@ class ScheduleController {
 
     async update(request, response) {
         const id = request.params.id;
-        const { name, email, birthDate, schedulingDay, schedulingTime } = request.body;
+        const { name, email, birthDate, schedulingDay, schedulingTime, wasAttended } = request.body;
 
         const schedule = await ScheduleModel.findByIdAndUpdate(
             id,
@@ -57,6 +61,7 @@ class ScheduleController {
                 birthDate,
                 schedulingDay,
                 schedulingTime,
+                wasAttended,
             },
             {
                 new: true,
@@ -64,6 +69,32 @@ class ScheduleController {
         );
 
         return response.json(schedule);
+    }
+    //Retonar quantidade de schedules marcados para um determinado dia
+    async getQuantityInDate(request, response) {
+        const { schedulingDay } = request.params;
+        try {
+            const countDate = await ScheduleModel.find({ schedulingDay: schedulingDay }).count();
+
+            response.json({ item: countDate });
+        } catch (error) {
+            response.json({ message: error.message });
+        }
+    }
+
+    //Retonar quantidade de schedules marcados para um determinado tempo em uma determinada data
+    async getQuantityInTime(request, response) {
+        const { schedulingDay, schedulingTime } = request.params;
+        try {
+            const countTime = await ScheduleModel.find({
+                schedulingDay: schedulingDay,
+                schedulingTime: schedulingTime,
+            }).count();
+
+            response.json({ item: countTime });
+        } catch (error) {
+            response.json({ message: error.message });
+        }
     }
 }
 
